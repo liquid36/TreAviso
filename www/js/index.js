@@ -56,8 +56,8 @@ var app = {
         // Your app must execute AT LEAST ONE call for the current position via standard Cordova geolocation,
         //  in order to prompt the user for Location permission.
         window.navigator.geolocation.getCurrentPosition(function(location) {
-            console.log('Location from Phonegap');
-        });
+            console.log('Location from Phonegap' + location.coords.latitude + ',' + location.coords.longitude);
+        }, function(location) {console.log("Error de localizacion");});
 
         var bgGeo = window.plugins.backgroundGeoLocation;
 
@@ -98,16 +98,12 @@ var app = {
             },
             desiredAccuracy: 10,
             stationaryRadius: 20,
-            distanceFilter: 30,
+            distanceFilter: 2,
             debug: true // <-- enable this hear sounds for background-geolocation life-cycle.
         });
 
         // Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app.
         bgGeo.start();
-	console.log('BackgroundGeoLocation ');
-	console.log('BackgroundGeoLocation ');
-	console.log('BackgroundGeoLocation ');
-	console.log('BackgroundGeoLocation ');
         // If you wish to turn OFF background-tracking, call the #stop method.
         // bgGeo.stop()
     }
