@@ -21,6 +21,8 @@ var app = {
     initialize: function() {
         this.bindEvents();
     },
+    
+    count: 0 ,
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
@@ -28,6 +30,18 @@ var app = {
     bindEvents: function() {
         console.log('BackgroundGeoLocation ');
         document.addEventListener('deviceready', this.onDeviceReady, true);
+	document.addEventListener('pause', this.onPause, true);
+    },
+    
+    onPause: function() {
+	var parentElement = document.getElementById("titulo");
+	parentElement.innerHTML = "PAUSEEEE";
+	
+	var parentElement = document.getElementById('deviceready');
+        var receivedElement = parentElement.querySelector('.received');
+	this.count = 0;
+	receivedElement.innerHTML = this.count;
+            
     },
     // deviceready Event Handler
     //
@@ -82,6 +96,11 @@ var app = {
             // Do your HTTP request here to POST location to your server.
             //
             //
+
+	    var parentElement = document.getElementById('deviceready');
+            var receivedElement = parentElement.querySelector('.received');
+	    this.count += 1;
+	    receivedElement.innerHTML = this.count;
             yourAjaxCallback.call(this);
         };
 
