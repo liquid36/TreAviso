@@ -35,7 +35,8 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-	console.log('--------   device ready');
+		console.log('--------   device ready');
+		console.log(window.plugins.backgroundGeoLocation);
         if (window.plugins.backgroundGeoLocation) {
             app.configureBackgroundGeoLocation();
         }
