@@ -21,6 +21,8 @@ var app = {
     initialize: function() {
         this.bindEvents();
     },
+    
+    count: 0 ,
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
@@ -28,6 +30,25 @@ var app = {
     bindEvents: function() {
         console.log('BackgroundGeoLocation ');
         document.addEventListener('deviceready', this.onDeviceReady, true);
+		document.addEventListener('pause', this.onPause, true);
+		document.addEventListener('resume', this.onResume, true);
+    },
+    
+    onResume: function() {
+      var parentElement = document.getElementById('deviceready');
+      var receivedElement = parentElement.querySelector('.received');
+      receivedElement.innerHTML = app.count;
+    },
+    
+    onPause: function() {
+		var parentElement = document.getElementById("titulo");
+		parentElement.innerHTML = "PAUSEEEE";
+	
+		var parentElement = document.getElementById('deviceready');
+        var receivedElement = parentElement.querySelector('.received');
+		this.count = 0;
+		receivedElement.innerHTML = this.count;
+            
     },
     // deviceready Event Handler
     //
@@ -37,7 +58,7 @@ var app = {
         app.receivedEvent('deviceready');
 		console.log('--------   device ready');
 		console.log(window.plugins.backgroundGeoLocation);
-        if (window.plugins.backgroundGeoLocation) {
+	    if (window.plugins.backgroundGeoLocation) {
             app.configureBackgroundGeoLocation();
         }
 
@@ -53,6 +74,9 @@ var app = {
 
         console.log('Received Event: ' + id);
     },
+    
+    
+    
     configureBackgroundGeoLocation: function() {
         // Your app must execute AT LEAST ONE call for the current position via standard Cordova geolocation,
         //  in order to prompt the user for Location permission.
@@ -83,6 +107,10 @@ var app = {
             // Do your HTTP request here to POST location to your server.
             //
             //
+			var parentElement = document.getElementById('deviceready');
+			var receivedElement = parentElement.querySelector('.received');
+			this.count += 1;
+			receivedElement.innerHTML = this.count;
             yourAjaxCallback.call(this);
         };
 
@@ -92,15 +120,10 @@ var app = {
         
         // BackgroundGeoLocation is highly configurable.
         bgGeo.configure(callbackFn, failureFn, {
-            url: 'http://only.for.android.com/update_location.json', // <-- only required for Android; ios allows javascript callbacks for your http
-            params: {                                               // HTTP POST params sent to your server when persisting locations.
-                auth_token: 'user_secret_auth_token',
-                foo: 'bar'
-            },
-            desiredAccuracy: 10,
-            stationaryRadius: 20,
-            distanceFilter: 2,
-            debug: true // <-- enable this hear sounds for background-geolocation life-cycle.
+			desiredAccuracy:  50,
+            stationaryRadius: 50,
+            distanceFilter: 20,
+            debug: false // <-- enable this hear sounds for background-geolocation life-cycle.
         });
 
         // Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app.
