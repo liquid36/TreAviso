@@ -115,7 +115,7 @@ var app = {
         };
 
         var failureFn = function(error) {
-            console.log('BackgroundGeoLocation error');
+            console.log(error);
         }
         
         // BackgroundGeoLocation is highly configurable.
