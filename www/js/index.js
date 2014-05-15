@@ -78,10 +78,19 @@ var app = {
     configureBackgroundGeoLocation: function() {
         // Your app must execute AT LEAST ONE call for the current position via standard Cordova geolocation,
         //  in order to prompt the user for Location permission.
-        window.navigator.geolocation.getCurrentPosition(function(location) {
+      
+	var options = {frequency: 3000, enableHighAccuracy: true};
+	navigator.geolocation.watchPosition(function(location) {
+            
+	    console.log('Location from Phonegap' + location.coords.latitude + ',' + location.coords.longitude);
+	    var parentElement = document.getElementById("titulo");
+	    parentElement.innerHTML = location.coords.latitude + ',' + location.coords.longitude ;
+        }, function(location) {console.log("Error de localizacion");}, options);
+      
+        /*window.navigator.geolocation.getCurrentPosition(function(location) {
             console.log('Location from Phonegap' + location.coords.latitude + ',' + location.coords.longitude);
         }, function(location) {console.log("Error de localizacion");});
-
+	*/
         var bgGeo = window.plugins.backgroundGeoLocation;
 
         /**
@@ -105,11 +114,11 @@ var app = {
             // Do your HTTP request here to POST location to your server.
             //
             //
-			var parentElement = document.getElementById('deviceready');
-			var receivedElement = parentElement.querySelector('.received');
-			this.count += 1;
-			receivedElement.innerHTML = this.count;
-            yourAjaxCallback.call(this);
+		var parentElement = document.getElementById('deviceready');
+		var receivedElement = parentElement.querySelector('.received');
+		this.count += 1;
+		receivedElement.innerHTML = this.count;
+		yourAjaxCallback.call(this);
         };
 
         var failureFn = function(error) {
@@ -118,14 +127,15 @@ var app = {
         
         // BackgroundGeoLocation is highly configurable.
         bgGeo.configure(callbackFn, failureFn, {
-			desiredAccuracy:  50,
-            stationaryRadius: 50,
-            distanceFilter: 20,
-            debug: false // <-- enable this hear sounds for background-geolocation life-cycle.
+	    url:'http://121.0.0.1',
+	    esiredAccuracy:  2,
+            stationaryRadius: 2,
+            distanceFilter: 2,
+            debug: true // <-- enable this hear sounds for background-geolocation life-cycle.
         });
 
         // Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app.
-        bgGeo.start();
+        bgGeo.start( function() {console.log("DOIT");}, function() {console.log("FAIL");} );
         // If you wish to turn OFF background-tracking, call the #stop method.
         // bgGeo.stop()
     }
