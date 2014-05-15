@@ -56,6 +56,8 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+		console.log('--------   device ready');
+		console.log(window.plugins.backgroundGeoLocation);
 	    if (window.plugins.backgroundGeoLocation) {
             app.configureBackgroundGeoLocation();
         }
@@ -122,7 +124,7 @@ var app = {
         };
 
         var failureFn = function(error) {
-            console.log('BackgroundGeoLocation error');
+            console.log(error);
         }
         
         // BackgroundGeoLocation is highly configurable.
