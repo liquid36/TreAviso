@@ -18,7 +18,7 @@
  */
 var app = {
     // Application Constructor
-    initialize: function() {
+    initialize: function () {
         this.bindEvents();
     },
     
@@ -27,23 +27,46 @@ var app = {
     //
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
+    bindEvents: function () {
         console.log('BackgroundGeoLocation ');
         document.addEventListener('deviceready', this.onDeviceReady, true);
 		document.addEventListener('pause', this.onPause, true);
 		document.addEventListener('resume', this.onResume, true);
+		document.addEventListener("backbutton", this.onBack, true);
     },
     
-    onResume: function() {
-      var parentElement = document.getElementById('deviceready');
-      var receivedElement = parentElement.querySelector('.received');
-      receivedElement.innerHTML = app.count;
+    onBack: function () {
+		console.log('Destroy services BackgroundGeoLocation ');
+		app.bgGeo.stop(); 	
+		navigator.app.exitApp();
+	},
+    
+    onResume: function () {
+		var dbShell = window.openDatabase("cordova_bg_locations", "1.0", "CDVBGDB", 1000);
+		var parentElement = document.getElementById('deviceready');
+		var receivedElement = parentElement.querySelector('.received');
+      
+		dbShell.transaction(function (dd) {  
+			dd.executeSql('SELECT * FROM location', [], app.querySuccess, app.errorCB); 
+			} , function () { console.log("Error en transaction ++++++") }  );
     },
     
-    onPause: function() {
-		var parentElement = document.getElementById("titulo");
-		parentElement.innerHTML = "PAUSEEEE";
-	
+    errorCB: function (err) {
+		var parentElement = document.getElementById('deviceready');
+		var receivedElement = parentElement.querySelector('.received');
+		receivedElement.innerHTML = "Q " + err ;
+		for (var o in err)
+			console.log("Error DB: " + o);
+	},
+    
+    querySuccess: function (db,result) {
+		var len = results.rows.length;
+        console.log("Location table: " + len + " rows found.");
+        for (var i=0; i<len; i++)
+            console.log("---> Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).latitude);
+	},
+    
+    onPause: function () {
 		var parentElement = document.getElementById('deviceready');
         var receivedElement = parentElement.querySelector('.received');
 		this.count = 0;
@@ -64,7 +87,7 @@ var app = {
 
     },
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
+    receivedEvent: function (id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
@@ -77,23 +100,16 @@ var app = {
     
     
     
-    configureBackgroundGeoLocation: function() {
+    configureBackgroundGeoLocation: function () {
         // Your app must execute AT LEAST ONE call for the current position via standard Cordova geolocation,
         //  in order to prompt the user for Location permission.
       
-	var options = {frequency: 3000, enableHighAccuracy: true};
-	navigator.geolocation.watchPosition(function(location) {
-            
-	    console.log('Location from Phonegap' + location.coords.latitude + ',' + location.coords.longitude);
-	    var parentElement = document.getElementById("titulo");
-	    parentElement.innerHTML = location.coords.latitude + ',' + location.coords.longitude ;
-        }, function(location) {console.log("Error de localizacion");}, options);
-      
-        /*window.navigator.geolocation.getCurrentPosition(function(location) {
+	
+        window.navigator.geolocation.getCurrentPosition(function(location) {
             console.log('Location from Phonegap' + location.coords.latitude + ',' + location.coords.longitude);
         }, function(location) {console.log("Error de localizacion");});
-	*/
-        var bgGeo = window.plugins.backgroundGeoLocation;
+	
+        this.bgGeo = window.plugins.backgroundGeoLocation;
 
         /**
         * This would be your own callback for Ajax-requests after POSTing background geolocation to your server.
@@ -105,7 +121,7 @@ var app = {
             // IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
             //
             //
-            bgGeo.finish();
+            this.bgGeo.finish();
         };
 
         /**
@@ -116,11 +132,7 @@ var app = {
             // Do your HTTP request here to POST location to your server.
             //
             //
-		var parentElement = document.getElementById('deviceready');
-		var receivedElement = parentElement.querySelector('.received');
-		this.count += 1;
-		receivedElement.innerHTML = this.count;
-		yourAjaxCallback.call(this);
+
         };
 
         var failureFn = function(error) {
@@ -128,7 +140,7 @@ var app = {
         }
         
         // BackgroundGeoLocation is highly configurable.
-        bgGeo.configure(callbackFn, failureFn, {
+        this.bgGeo.configure(callbackFn, failureFn, {
 	    url:'http://121.0.0.1',
 	    esiredAccuracy:  2,
             stationaryRadius: 2,
@@ -136,10 +148,7 @@ var app = {
             debug: true // <-- enable this hear sounds for background-geolocation life-cycle.
         });
 
-        // Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app.
-        bgGeo.start( function() {console.log("DOIT");}, function() {console.log("FAIL");} );
-        // If you wish to turn OFF background-tracking, call the #stop method.
-        // bgGeo.stop()
+        this.bgGeo.start( function() {console.log("DOIT");}, function() {console.log("FAIL");} );
     }
 
 };
