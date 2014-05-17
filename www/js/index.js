@@ -42,41 +42,22 @@ var app = {
 	},
     
     onResume: function () {
-		var dbShell = window.openDatabase("cordova_bg_locations", "1.0", "CDVBGDB", 1000);
 		var parentElement = document.getElementById('deviceready');
 		var receivedElement = parentElement.querySelector('.received');
-      
-		dbShell.transaction(function (dd) {  
-			dd.executeSql('SELECT * FROM location', [], app.querySuccess, app.errorCB); 
-			} , function () { console.log("Error en transaction ++++++") }  );
+		
+		app.bgGeo.getPoint(function (a) { for(var o in a )  console.log(a[o].recordedAt); }  );
+
     },
-    
-    errorCB: function (err) {
-		var parentElement = document.getElementById('deviceready');
-		var receivedElement = parentElement.querySelector('.received');
-		receivedElement.innerHTML = "Q " + err ;
-		for (var o in err)
-			console.log("Error DB: " + o);
-	},
-    
-    querySuccess: function (db,result) {
-		var len = results.rows.length;
-        console.log("Location table: " + len + " rows found.");
-        for (var i=0; i<len; i++)
-            console.log("---> Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).latitude);
-	},
+
     
     onPause: function () {
-		var parentElement = document.getElementById('deviceready');
+		/*var parentElement = document.getElementById('deviceready');
         var receivedElement = parentElement.querySelector('.received');
 		this.count = 0;
-		receivedElement.innerHTML = this.count;
+		receivedElement.innerHTML = this.count;*/
             
     },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicity call 'app.receivedEvent(...);'
+
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
 		console.log('--------   device ready');
@@ -141,8 +122,8 @@ var app = {
         
         // BackgroundGeoLocation is highly configurable.
         this.bgGeo.configure(callbackFn, failureFn, {
-	    url:'http://121.0.0.1',
-	    esiredAccuracy:  2,
+			url:'http://121.0.0.1',
+			esiredAccuracy:  2,
             stationaryRadius: 2,
             distanceFilter: 2,
             debug: true // <-- enable this hear sounds for background-geolocation life-cycle.
