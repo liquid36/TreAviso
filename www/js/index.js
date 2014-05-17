@@ -45,7 +45,15 @@ var app = {
 		var parentElement = document.getElementById('deviceready');
 		var receivedElement = parentElement.querySelector('.received');
 		
-		app.bgGeo.getPoint(function (a) { for(var o in a )  console.log(a[o].recordedAt); }  );
+		//app.bgGeo.getPoint(function (a) { for(var o in a )  console.log(a[o].recordedAt); }  );
+		var db = window.sqlitePlugin.openDatabase({name: "cordova_bg_locations", bgType: 1});
+		db.transaction(function(tx) {
+			tx.executeSql("SELECT * from location;", [], function(tx, res) {
+				console.log("Numero de filas: " + res.rows.length);
+            });
+		}, function(e) {
+            console.log("ERROR: " + e.message);
+        });		
 
     },
 
@@ -60,7 +68,6 @@ var app = {
 
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-		console.log('--------   device ready');
 		console.log(window.plugins.backgroundGeoLocation);
 	    if (window.plugins.backgroundGeoLocation) {
             app.configureBackgroundGeoLocation();
@@ -76,7 +83,7 @@ var app = {
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
 
-        console.log('Received Event: ' + id);
+        //console.log('Received Event: ' + id);
     },
     
     
@@ -110,10 +117,6 @@ var app = {
         */
         var callbackFn = function(location) {
             console.log('[js] BackgroundGeoLocation callback:  ' + location.latitudue + ',' + location.longitude);
-            // Do your HTTP request here to POST location to your server.
-            //
-            //
-
         };
 
         var failureFn = function(error) {
@@ -129,7 +132,7 @@ var app = {
             debug: true // <-- enable this hear sounds for background-geolocation life-cycle.
         });
 
-        this.bgGeo.start( function() {console.log("DOIT");}, function() {console.log("FAIL");} );
+        this.bgGeo.start();
     }
 
 };

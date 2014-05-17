@@ -72,7 +72,7 @@ then
 	#cordova plugin add https://github.com/phonegap-build/PushPlugin.git
 	#cordova plugin add https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git
 	
-	#cordova plugin add https://github.com/brodysoft/Cordova-SQLitePlugin
+	cordova plugin add https://github.com/brodysoft/Cordova-SQLitePlugin
 	cordova plugin rm org.transistorsoft.cordova.background-geolocation
 	cordova plugin add MyPlugin/cordova-plugin-background-geolocation/
 	echo "====================================================="
