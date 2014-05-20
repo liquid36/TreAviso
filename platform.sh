@@ -1,6 +1,4 @@
 #!/bin/bash
-
-# Esta es la forma por el momento de refresh el plug-in
 mkdir platforms
 mkdir plugins
 cordova platforms rm android
