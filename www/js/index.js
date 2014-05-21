@@ -23,37 +23,34 @@ var app = {
     },
     
     count: 0 ,
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
+
+
     bindEvents: function () {
-        console.log('BackgroundGeoLocation ');
         document.addEventListener('deviceready', this.onDeviceReady, true);
 		document.addEventListener('pause', this.onPause, true);
 		document.addEventListener('resume', this.onResume, true);
 		document.addEventListener("backbutton", this.onBack, true);
+		window.addEventListener('push', this.add);
     },
+
+    add:function() {
+		console.log("It's work!!!");	
+	},
     
     onBack: function () {
 		console.log('Destroy services BackgroundGeoLocation ');
-		app.bgGeo.stop(); 	
 		navigator.app.exitApp();
 	},
     
     onResume: function () {
-		var parentElement = document.getElementById('deviceready');
-		var receivedElement = parentElement.querySelector('.received');
-		
-		//app.bgGeo.getPoint(function (a) { for(var o in a )  console.log(a[o].recordedAt); }  );
-		var db = window.sqlitePlugin.openDatabase({name: "cordova_bg_locations", bgType: 1});
+		/*var db = window.sqlitePlugin.openDatabase({name: "cordova_bg_locations", bgType: 1});
 		db.transaction(function(tx) {
 			tx.executeSql("SELECT * from location;", [], function(tx, res) {
 				console.log("Numero de filas: " + res.rows.length);
             });
 		}, function(e) {
             console.log("ERROR: " + e.message);
-        });		
+        });*/		
 
     },
 
@@ -67,26 +64,11 @@ var app = {
     },
 
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-		console.log(window.plugins.backgroundGeoLocation);
+		
 	    if (window.plugins.backgroundGeoLocation) {
-            app.configureBackgroundGeoLocation();
-        }
-
+            //app.configureBackgroundGeoLocation();  
+        } 
     },
-    // Update DOM on a Received Event
-    receivedEvent: function (id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        //console.log('Received Event: ' + id);
-    },
-    
-    
     
     configureBackgroundGeoLocation: function () {
         // Your app must execute AT LEAST ONE call for the current position via standard Cordova geolocation,
