@@ -227,7 +227,7 @@
 
   var getTarget = function (e) {
     var target = findTarget(e.target);
-
+    console.log(target);
     if (!target ||
         e.which > 1 ||
         e.metaKey ||
@@ -238,7 +238,7 @@
         !target.hash && /#/.test(target.href) ||
         target.hash && target.href.replace(target.hash, '') === location.href.replace(location.hash, '') ||
         target.getAttribute('data-ignore') === 'push') { return; }
-
+    
     return target;
   };
 
@@ -273,7 +273,7 @@
     var transitionFrom;
     var transitionFromObj;
     var id = e.state;
-
+    
     if (!id || !cacheMapping[id]) {
       return;
     }
@@ -616,7 +616,7 @@
   window.addEventListener('touchstart', function () { isScrolling = false; });
   window.addEventListener('touchmove', function () { isScrolling = true; });
   window.addEventListener('touchend', touchend);
-  window.addEventListener('click', function (e) { if (getTarget(e)) {e.preventDefault();} });
+  window.addEventListener('click', function (e) { if (getTarget(e)) {e.preventDefault(); touchend(e); } });
   window.addEventListener('popstate', popstate);
   window.PUSH = PUSH;
 
