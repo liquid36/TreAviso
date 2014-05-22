@@ -596,9 +596,10 @@
     }
 
     data.title = head.querySelector('title');
-    
-    var text = 'innerText' in data.title ? 'innerText' : 'textContent';
-    data.title = data.title && data.title[text].trim();
+    if(data.title !== null && data.title !== undefined) {
+        var text = 'innerText' in data.title ? 'innerText' : 'textContent';
+        data.title = data.title && data.title[text].trim();
+    }
 
     if (options.transition) {
       data = extendWithDom(data, '.content', body);
