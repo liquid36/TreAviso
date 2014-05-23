@@ -65,6 +65,25 @@
         <script type="text/javascript" src="phonegap.js"></script>
         <script src="js/jquery-2.1.1.min.js"></script>
         <script src="js/classList.min.js"></script>
+        <script> 
+		(function () {
+			if(window.CustomEvent === undefined) {
+			  function CustomEvent ( event, params ) {
+				params = params || { bubbles: false, cancelable: false, detail: undefined };
+				var evt = document.createEvent( 'CustomEvent' );
+				evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+				return evt;
+			   };
+			
+			  CustomEvent.prototype = window.Event.prototype;
+			
+			  window.CustomEvent = CustomEvent;
+				
+				
+			}
+			
+		})();	
+		</script>
 		<script src="ratchet/js/ratchet.js"></script>  
         
         <script type="text/javascript" src="js/index.js"></script>

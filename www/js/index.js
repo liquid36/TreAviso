@@ -30,7 +30,7 @@ var app = {
 		document.addEventListener('pause', this.onPause, true);
 		document.addEventListener('resume', this.onResume, true);
 		document.addEventListener("backbutton", this.onBack, true);
-		window.addEventListener('push', this.add);
+		window.addEventListener('push', function(){ console.log("It's work!!!"); } ,true);
     },
 
     add:function() {
@@ -43,14 +43,7 @@ var app = {
 	},
     
     onResume: function () {
-		/*var db = window.sqlitePlugin.openDatabase({name: "cordova_bg_locations", bgType: 1});
-		db.transaction(function(tx) {
-			tx.executeSql("SELECT * from location;", [], function(tx, res) {
-				console.log("Numero de filas: " + res.rows.length);
-            });
-		}, function(e) {
-            console.log("ERROR: " + e.message);
-        });*/		
+				
 
     },
 
