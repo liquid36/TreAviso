@@ -34,26 +34,30 @@
         <header class="bar bar-nav">
 			<h1 class="title">TreAviso</h1>
 		</header>		
-		
+		<!--<a class="tab-item" href="two.html" data-transition="fade">AAA</a>-->
 		<div class="content">
-			<ul class="table-view" id="alarmList">
-			  <a class="tab-item" href="two.html" data-transition="fade">AAA</a>
-			</ul>
+			<form>
+                <div>Recordarme cuando esté cerca de ...</div>
+                <div id="map"></div>
+                <label for="txtMetros">Avisarme al acercarme a </label>
+                <input type="text" id="txtMetros" placeholder="metros" />
+                <button class="btn btn-positive btn-block">Guardar</button>
+            </form>
 		</div>	
 		
 		<nav class="bar bar-standard bar-footer">
 			<a class="tab-item" href="two.html" data-transition="fade">
 				<span class="icon icon-plus"></span>
-				<span class="tab-label">Añadir</span>
+				<span class="tab-label">Alarmas</span>
 			</a>
 			<a class="tab-item" href="#">
 				<span class="icon icon-trash"></span>
-				<span class="tab-label">Borrar</span>
+				<span class="tab-label">Nueva</span>
 			</a>
-			<a class="tab-item" href="#">
+			<!--<a class="tab-item" href="#">
 				<span class="icon icon-play"></span>
 				<span class="tab-label">Play</span>
-			</a>
+			</a>-->
 			<a class="tab-item" href="#">
 				<span class="icon icon-list"></span>
 				<span class="tab-label">Config</span>
@@ -71,7 +75,11 @@
 			  function CustomEvent ( event, params ) {
 				params = params || { bubbles: false, cancelable: false, detail: undefined };
 				var evt = document.createEvent( 'HTMLEvents' );
-				evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+				if(evt.initCustomEvent !== null && evt.initCustomEvent !== undefined) {
+				    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail );
+                } else {
+                    evt.initEvent(event, params.bubbles, params.cancelable);
+                }
 				return evt;
 			   };
 			
@@ -84,11 +92,45 @@
 			
 		})();	
 		</script>
-		<script src="ratchet/js/ratchet.js"></script>  
+		<script src="ratchet/js/ratchet.js"></script>
         <script type="text/javascript" src="js/db.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
+        </script>
+		<link rel="stylesheet" href="leaflet/leaflet.css" />
+        <style>
+            #map { height: 300px; }
+        </style>
+        <script src="leaflet/leaflet.js"></script>
+        <script>
+            var map = L.map('map').setView([-32.951856, -60.665230], 13);
+            /*L.tileLayer('http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18
+}).addTo(map);*/
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '' //&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors
+}).addTo(map);
+            var marker = L.marker([-32.951856, -60.665230]).addTo(map);
+            var circle = L.circle([-32.951856, -60.665230], 500, {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5
+            }).addTo(map);
+            marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+            circle.bindPopup("I am a circle.");
+       var popup = L.popup();
+
+		function onMapClick(e) {
+			popup
+				.setLatLng(e.latlng)
+				.setContent("You clicked the map at " + e.latlng.toString())
+				.openOn(map);
+		}
+
+		map.on('click', onMapClick);
+
         </script>
     </body>
 </html>
