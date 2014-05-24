@@ -39,6 +39,7 @@ var app = {
     
     onBack: function () {
 		console.log('Destroy services BackgroundGeoLocation ');
+		app.bgGeo.stop();
 		navigator.app.exitApp();
 	},
     
@@ -57,9 +58,27 @@ var app = {
     },
 
     onDeviceReady: function() {
+		var db = new DB('cordova_bg_locations');
+		db.deleteAllAlarm();
+		var a = {}
+		a.name = "Tio";
+		a.active = 1;
+		a.path = ""; 
+		a.latitude = "-32.946460";
+		a.longitude = "-60.701616";
+		a.metros = "300";
+		db.addAlarm(a);
+		var b =  {}
+		b.name = "Casa";
+		b.active = 1;
+		b.path = ""; 
+		b.latitude = "-32.929937";
+		b.longitude = "-60.673352";
+		b.metros = "300";
+		db.addAlarm(b);
 		
 	    if (window.plugins.backgroundGeoLocation) {
-            //app.configureBackgroundGeoLocation();  
+            app.configureBackgroundGeoLocation();  
         } 
     },
     
