@@ -61,19 +61,20 @@ var app = {
 		var db = new DB('cordova_bg_locations');
 		db.deleteAllAlarm();
 		var a = {}
-		a.name = "Tio";
+		a.name = "Casa Luisina";
 		a.active = 1;
-		a.path = ""; 
-		a.latitude = "-32.946460";
-		a.longitude = "-60.701616";
+		a.path = "";   
+		a.latitude = "-32.939048";
+		a.longitude = "-60.658000";
 		a.metros = "300";
 		db.addAlarm(a);
+		
 		var b =  {}
-		b.name = "Casa";
+		b.name = "Casa Mariano";
 		b.active = 1;
 		b.path = ""; 
-		b.latitude = "-32.929937";
-		b.longitude = "-60.673352";
+		b.latitude = "-32.946406";     
+		b.longitude = "-60.699902";
 		b.metros = "300";
 		db.addAlarm(b);
 		
@@ -120,9 +121,9 @@ var app = {
         // BackgroundGeoLocation is highly configurable.
         this.bgGeo.configure(callbackFn, failureFn, {
 			url:'http://121.0.0.1',
-			esiredAccuracy:  2,
-            stationaryRadius: 2,
-            distanceFilter: 2,
+			esiredAccuracy:  10,
+            stationaryRadius: 20,
+            distanceFilter: 30,
             debug: true // <-- enable this hear sounds for background-geolocation life-cycle.
         });
 
