@@ -35,15 +35,6 @@
 			<h1 class="title">TreAviso</h1>
 		</header>		
 		<!--<a class="tab-item" href="two.html" data-transition="fade">AAA</a>-->
-		<div class="content">
-			<form>
-                <div>Recordarme cuando esté cerca de ...</div>
-                <div id="map"></div>
-                <label for="txtMetros">Avisarme al acercarme a </label>
-                <input type="text" id="txtMetros" placeholder="metros" />
-                <button class="btn btn-positive btn-block">Guardar</button>
-            </form>
-		</div>	
 		
 		<nav class="bar bar-standard bar-footer">
 			<a class="tab-item" href="two.html" data-transition="fade">
@@ -63,35 +54,20 @@
 				<span class="tab-label">Config</span>
 			</a>
 		</nav>
-		
-		
+		<div class="content">
+			<form>
+                <div>Recordarme cuando esté cerca de ...</div>
+                <div id="map"></div>
+                <label for="txtMetros">Avisarme al acercarme a </label>
+                <input type="number" id="txtMetros" placeholder="metros" />
+                <button class="btn btn-positive btn-block" id="btnSaveAlarm">Guardar</button>
+            </form>
+		</div>	
         <script type="text/javascript" src="cordova.js"></script>  
         <script type="text/javascript" src="phonegap.js"></script>
         <script src="js/jquery-2.1.1.min.js"></script>
         <script src="js/classList.min.js"></script>
-        <script> 
-		(function () {
-			if(window.CustomEvent === undefined) {
-			  function CustomEvent ( event, params ) {
-				params = params || { bubbles: false, cancelable: false, detail: undefined };
-				var evt = document.createEvent( 'HTMLEvents' );
-				if(evt.initCustomEvent !== null && evt.initCustomEvent !== undefined) {
-				    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail );
-                } else {
-                    evt.initEvent(event, params.bubbles, params.cancelable);
-                }
-				return evt;
-			   };
-			
-			  CustomEvent.prototype = window.Event.prototype;
-			
-			  window.CustomEvent = CustomEvent;
-				
-				
-			}
-			
-		})();	
-		</script>
+        <script src="js/CustomEvent.js"></script>
 		<script src="ratchet/js/ratchet.js"></script>
         <script type="text/javascript" src="js/db.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
@@ -100,37 +76,45 @@
         </script>
 		<link rel="stylesheet" href="leaflet/leaflet.css" />
         <style>
-            #map { height: 300px; }
+            #map { height: 250px; }
         </style>
         <script src="leaflet/leaflet.js"></script>
+        <script src="js/entities.js"></script>
         <script>
             var map = L.map('map').setView([-32.951856, -60.665230], 13);
-            /*L.tileLayer('http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18
-}).addTo(map);*/
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '' //&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors
-}).addTo(map);
+                attribution: '&copy; <a href="http://osm.org/copyright">OSM</a>' 
+            }).addTo(map);
             var marker = L.marker([-32.951856, -60.665230]).addTo(map);
             var circle = L.circle([-32.951856, -60.665230], 500, {
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5
             }).addTo(map);
-            marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-            circle.bindPopup("I am a circle.");
-       var popup = L.popup();
+            //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+            //circle.bindPopup("I am a circle.");
+            var popup = L.popup();
 
-		function onMapClick(e) {
-			popup
-				.setLatLng(e.latlng)
-				.setContent("You clicked the map at " + e.latlng.toString())
-				.openOn(map);
-		}
+            function onMapClick(e) {
+                /*popup
+                    .setLatLng(e.latlng)
+                    .setContent("You clicked the map at " + e.latlng.toString())
+                    .openOn(map);*/
+                marker.setLatLng(e.latlng).update();
+            }
 
-		map.on('click', onMapClick);
-
+            map.on('click', onMapClick);
+            $(document).ready(function (){
+                $("#btnSaveAlarm").click(function (event) {
+                    event.preventDefault();
+                    var db = new DB('cordova_bg_locations');
+                    var ll = marker.getLatLng();
+                    //db.deleteAllAlarm();
+                    var a = new Alarm("Custom", 1, ll.lat, ll.lng, $("#txtMetros").val());
+                    console.log(a);
+                    db.addAlarm(a);
+                });
+            });
         </script>
     </body>
 </html>
