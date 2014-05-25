@@ -37,7 +37,7 @@
 		<!--<a class="tab-item" href="two.html" data-transition="fade">AAA</a>-->
 		
 		<nav class="bar bar-standard bar-footer">
-			<a class="tab-item" href="two.html" data-transition="fade">
+			<a class="tab-item" href="two.html" data-transition="slide-in">
 				<span class="icon icon-plus"></span>
 				<span class="tab-label">Alarmas</span>
 			</a>
@@ -114,6 +114,33 @@
                     console.log(a);
                     db.addAlarm(a);
                 });
+            });
+            window.addEventListener('push', function (e) {
+                //console.log(e);
+                //console.log(window.location.pathname);
+                //console.log(window.location.pathname.indexOf("two.html"));
+                var _alarms = $("#tblAlarms");
+                if(_alarms.length > 0) {
+                    //Llegamos al listado de alarmas
+                    var _tpl = $("#tplAlarm").remove();
+                    var db = new DB('cordova_bg_locations');
+                    db.getAllAlarm(function (alarms) {
+                        //console.log(alarms);
+                        //console.log(alarms.length);
+                        if(alarms != null && alarms.length > 0) {
+                            for(var i = 0; i < alarms.length; i++) {
+                                var _alarma = _tpl.clone();
+                                var alarm = alarms[i];
+                                console.log(alarm.name);
+                                _alarma.removeAttr("style").removeAttr("id");
+                                _alarma.find(".alarm-name").text(alarm.name);
+                                _alarma.find(".alarm-location").text("[ " + alarm.latitude + ", " + alarm.longitude + " ]");
+                                _alarma.find(".alarm-meter").text(alarm.metros + " metros antes");
+                                _alarms.append(_alarma);
+                            }
+                        }
+                    });
+                }
             });
         </script>
     </body>

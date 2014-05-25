@@ -16,16 +16,24 @@
   <body ontouchstart="">
     <header class="bar bar-nav">
       <a class="icon icon-left-nav pull-left" href="index.html" data-transition="slide-out"></a>
-      <h1 class="title">Page two</h1>
+      <h1 class="title">Alarmas</h1>
     </header>
     <div class="content">
-      <div class="card">
-        <ul class="table-view">
-          <li class="table-view-cell">
-            <a href="index.html" data-transition="slide-out">Tap or click here to go back. You can also try your browser's back button.</a>
-          </li>
-        </ul>
-      </div>
+        <div class="card">
+            <ul class="table-view" id="tblAlarms">
+                <li class="table-view-cell" id="tplAlarm" style="display:none;"><!--media-->
+                    <a class="navigate-right">
+                      <!--<img class="media-object pull-left" src="http://placehold.it/42x42">-->
+                      <div class="media-body">
+                          <div class="alarm-name"></div>
+                          <div class="alarm-location"></div>
+                          <div class="alarm-meters"></div>
+                      </div>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
     </div>
   </body>
 </html>

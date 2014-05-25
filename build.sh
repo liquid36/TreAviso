@@ -3,6 +3,12 @@
 rebuild=0
 deploy=0
 debug=1
+path="platforms/android/ant-build"
+if [ "$2" == "p" ]; then
+	path="platforms/android/bin"
+	echo "Pablo path: $path"
+fi
+echo $path
 #Build
 if [ "$1" == "b" ]; then
 	rebuild=0
@@ -87,11 +93,11 @@ if [ $deploy == 1 ]
 then
 	echo "Instalacion en el telefono"
 	echo "====================================================="
-    adb install platforms/android/ant-build/TreAviso-debug.apk
+    adb install $path/TreAviso-debug.apk
 else
 	echo "Reinstalacion en el telefono"
 	echo "====================================================="
-    adb install -r platforms/android/ant-build/TreAviso-debug.apk
+    adb install -r $path/TreAviso-debug.apk
 fi
 echo ""
 if [ $debug == 1 ] 
