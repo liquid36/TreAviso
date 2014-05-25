@@ -57,7 +57,7 @@
 		<div class="content">
 			<form>
                 <div>Recordarme cuando esté cerca de ...</div>
-                <div id="map"></div>
+                <div id="map" style="height: 215px;"></div>
                 <label for="txtMetros">Avisarme al acercarme a </label>
                 <input type="number" id="txtMetros" placeholder="metros" />
                 <button class="btn btn-positive btn-block" id="btnSaveAlarm">Guardar</button>
@@ -75,37 +75,34 @@
             app.initialize();
         </script>
 		<link rel="stylesheet" href="leaflet/leaflet.css" />
-        <style>
-            #map { height: 210px; }
-        </style>
         <script src="leaflet/leaflet.js"></script>
         <script src="js/entities.js"></script>
         <script>
-            var map = L.map('map').setView([-32.951856, -60.665230], 13);
-            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OSM</a>' 
-            }).addTo(map);
-            var marker = L.marker([-32.951856, -60.665230]).addTo(map);
-            var circle = L.circle([-32.951856, -60.665230], 500, {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.5
-            }).addTo(map);
-            //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-            //circle.bindPopup("I am a circle.");
-            var popup = L.popup();
+            function addAlarmPageInit() {
+                var map = L.map('map').setView([-32.951856, -60.665230], 13);
+                L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="http://osm.org/copyright">OSM</a>' 
+                }).addTo(map);
+                var marker = L.marker([-32.951856, -60.665230]).addTo(map);
+                var circle = L.circle([-32.951856, -60.665230], 500, {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.5
+                }).addTo(map);
+                //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+                //circle.bindPopup("I am a circle.");
+                var popup = L.popup();
 
-            function onMapClick(e) {
-                /*popup
-                    .setLatLng(e.latlng)
-                    .setContent("You clicked the map at " + e.latlng.toString())
-                    .openOn(map);*/
-                marker.setLatLng(e.latlng).update();
-            }
+                function onMapClick(e) {
+                    /*popup
+                        .setLatLng(e.latlng)
+                        .setContent("You clicked the map at " + e.latlng.toString())
+                        .openOn(map);*/
+                    marker.setLatLng(e.latlng).update();
+                }
 
-            map.on('click', onMapClick);
-            $(document).ready(function (){
-                $("#btnSaveAlarm").click(function (event) {
+                map.on('click', onMapClick);
+                $("#btnSaveAlarm").unbind("click").click(function (event) {
                     event.preventDefault();
                     var db = new DB('cordova_bg_locations');
                     var ll = marker.getLatLng();
@@ -114,34 +111,37 @@
                     console.log(a);
                     db.addAlarm(a);
                 });
-            });
+            }
             window.addEventListener('push', function (e) {
-                //console.log(e);
-                //console.log(window.location.pathname);
-                //console.log(window.location.pathname.indexOf("two.html"));
                 var _alarms = $("#tblAlarms");
-                if(_alarms.length > 0) {
-                    //Llegamos al listado de alarmas
-                    var _tpl = $("#tplAlarm").remove();
-                    var db = new DB('cordova_bg_locations');
-                    db.getAllAlarm(function (alarms) {
-                        //console.log(alarms);
-                        //console.log(alarms.length);
-                        if(alarms != null && alarms.length > 0) {
-                            for(var i = 0; i < alarms.length; i++) {
-                                var _alarma = _tpl.clone();
-                                var alarm = alarms[i];
-                                console.log(alarm.name);
-                                _alarma.removeAttr("style").removeAttr("id");
-                                _alarma.find(".alarm-name").text(alarm.name);
-                                _alarma.find(".alarm-location").text("[ " + alarm.latitude + ", " + alarm.longitude + " ]");
-                                _alarma.find(".alarm-meter").text(alarm.metros + " metros antes");
-                                _alarms.append(_alarma);
+                var _map = $("#map");
+                if(_map.length > 0) {
+                    addAlarmPageInit();
+                } else {
+                    if(_alarms.length > 0) {
+                        //Llegamos al listado de alarmas
+                        var _tpl = $("#tplAlarm").remove();
+                        var db = new DB('cordova_bg_locations');
+                        db.getAllAlarm(function (alarms) {
+                            //console.log(alarms);
+                            //console.log(alarms.length);
+                            if(alarms != null && alarms.length > 0) {
+                                for(var i = 0; i < alarms.length; i++) {
+                                    var _alarma = _tpl.clone();
+                                    var alarm = alarms[i];
+                                    console.log(alarm.name);
+                                    _alarma.removeAttr("style").removeAttr("id");
+                                    _alarma.find(".alarm-name").text(alarm.name);
+                                    _alarma.find(".alarm-location").text("[ " + alarm.latitude + ", " + alarm.longitude + " ]");
+                                    _alarma.find(".alarm-meter").text(alarm.metros + " metros antes");
+                                    _alarms.append(_alarma);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             });
+            addAlarmPageInit();
         </script>
     </body>
 </html>
