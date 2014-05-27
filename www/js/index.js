@@ -30,12 +30,7 @@ var app = {
 		document.addEventListener('pause', this.onPause, true);
 		document.addEventListener('resume', this.onResume, true);
 		document.addEventListener("backbutton", this.onBack, true);
-		window.addEventListener('push', function(){ console.log("It's work!!!"); } ,true);
     },
-
-    add:function() {
-		console.log("It's work!!!");	
-	},
     
     onBack: function () {
 		console.log('Destroy services BackgroundGeoLocation ');
@@ -44,17 +39,16 @@ var app = {
 	},
     
     onResume: function () {
-				
-
+		app.bgGeo().stop();
     },
 
     
     onPause: function () {
+		app.bgGeo().start();
 		/*var parentElement = document.getElementById('deviceready');
         var receivedElement = parentElement.querySelector('.received');
 		this.count = 0;
 		receivedElement.innerHTML = this.count;*/
-            
     },
 
     onDeviceReady: function() {
@@ -81,6 +75,8 @@ var app = {
 	    if (window.plugins.backgroundGeoLocation) {
             app.configureBackgroundGeoLocation();  
         } 
+        
+        AlarmsPageInit();
     },
     
     configureBackgroundGeoLocation: function () {
@@ -120,14 +116,13 @@ var app = {
         
         // BackgroundGeoLocation is highly configurable.
         this.bgGeo.configure(callbackFn, failureFn, {
-			url:'http://121.0.0.1',
 			esiredAccuracy:  10,
             stationaryRadius: 20,
             distanceFilter: 30,
             debug: true // <-- enable this hear sounds for background-geolocation life-cycle.
         });
 
-        this.bgGeo.start();
+        //this.bgGeo.start();
     }
 
 };
