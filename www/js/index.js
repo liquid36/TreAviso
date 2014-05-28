@@ -65,7 +65,7 @@ var app = {
 		
 		var b =  {}
 		b.name = "Casa Mariano";
-		b.active = 1;
+		b.active = 0;
 		b.path = ""; 
 		b.latitude = "-32.946406";     
 		b.longitude = "-60.699902";

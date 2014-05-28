@@ -35,27 +35,26 @@ function MapPageInit(){
 
 function AlarmsPageInit()
 {
-	//Llegamos al listado de alarmas
 	var _alarms = $("#tblAlarms");
 	var _tpl = $("#tplAlarm").remove();
     var db = new DB('cordova_bg_locations');
-    db.getAllAlarm(function (alarms) {
-		//console.log(alarms);
-		console.log("Aca estoy " + alarms.length);
-        if(alarms != null && alarms.length > 0) {
-			for(var i = 0; i < alarms.length; i++) {
-				var _alarma = _tpl.clone();
-                var alarm = alarms[i];
-                console.log(alarm.name);
-                _alarma.removeAttr("style").removeAttr("id");
-                _alarma.find(".alarm-name").text(alarm.name);
+    db.getAllAlarm(function (alarmList) {
+        if(alarmList != null && alarmList.length > 0) {
+			for(var i = 0; i < alarmList.length; i++) {
+				var _alarmHTML = _tpl.clone();
+                var alarm = alarmList[i];
+                _alarmHTML.removeAttr("style").removeAttr("id");
+                _alarmHTML.find(".alarm-name").text(alarm.name);
+                _alarmHTML.attr("id","al-" + alarm.id);
                  //_alarma.find(".alarm-location").text("[ " + alarm.latitude + ", " + alarm.longitude + " ]");
                  //_alarma.find(".alarm-meter").text(alarm.metros + " metros antes");
-                 if (alarm.active)
-					_alarma.find(".toggle").addClass("active");
+                var tecla = _alarmHTML.find(".toggle");
+                if (alarm.active > 0)
+					tecla.addClass("active");
 				else	
-					_alarma.find(".toggle").removeClass("active");
-				alarms.append(_alarma);
+					tecla.removeClass("active");
+				tecla.bind("toggle", function (){ console.log(  alarm.id + " ---> " + tecla.hasClass("active")   ); });
+				_alarms.append(_alarmHTML);
             }
         }
     });
