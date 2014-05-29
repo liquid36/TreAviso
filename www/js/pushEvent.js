@@ -65,15 +65,23 @@ function AlarmsPageInit()
     });
 }
 
+function addAlarmPageInit()
+{
+	$("#Guardar").click(function (){ console.log("algo hice además de lo otro"); });
+}
+
 window.addEventListener('push', function (e) {
 	var _alarms = $("#tblAlarms");
     var _map = $("#map");
+    var _add = $("#AlarmForm");
     if(_map.length > 0) {
 		MapPageInit();
     } else {
 		if(_alarms.length > 0) {
 			AlarmsPageInit();
-        }
+        } else if (_add.length > 0) {
+			addAlarmPageInit();
+		}
     }
 });
      

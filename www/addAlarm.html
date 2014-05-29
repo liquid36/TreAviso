@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"/>
     <title>Ratchet</title>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
@@ -14,21 +14,29 @@
   </head>
       <body >
         <header class="bar bar-nav">
+			<a href="index.html" >
+				<button class="btn btn-negative pull-left">
+					<span class="icon icon-left"></span>
+					Volver
+				</button>
+			</a>
 			<h1 class="title">TreAviso</h1>
 		</header>	
-		
-			
-		<!--<a class="tab-item" href="two.html" data-transition="fade">AAA</a>-->
-		
-		
 		<div class="content">
-			<form>
-                <div>Recordarme cuando esté cerca de ...</div>
-                <div id="map" style="height: 215px;"></div>
-                <label for="txtMetros">Avisarme al acercarme a </label>
-                <input type="number" id="txtMetros" placeholder="metros" />
-                <button class="btn btn-positive btn-block" id="btnSaveAlarm">Guardar</button>
-            </form>
+			<form id="AlarmForm">
+				<input type="text"   placeholder="Nombre"/>
+				<input type="text" 	 placeholder="Metros"/>
+				<div class="input-row">
+					<input type="text"   placeholder="Coordenadas"/>
+					<a href="#">
+						<span class="icon icon-list pull-right"></span>
+					</a>
+				</div>
+				<input type="text"   placeholder="Music Path"/>
+				<a href="index.html" id="Guardar"> 
+					<button class="btn btn-positive btn-block"  >Guardar</button>
+				</a>	
+			</form>
 		</div>	
 	</body>
 </html>
