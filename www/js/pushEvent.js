@@ -49,12 +49,17 @@ function AlarmsPageInit()
                  //_alarma.find(".alarm-location").text("[ " + alarm.latitude + ", " + alarm.longitude + " ]");
                  //_alarma.find(".alarm-meter").text(alarm.metros + " metros antes");
                 var tecla = _alarmHTML.find(".toggle");
+                tecla.attr("data",alarm.id);
                 if (alarm.active > 0)
 					tecla.addClass("active");
 				else	
 					tecla.removeClass("active");
-				tecla.bind("toggle", function (){ console.log(  alarm.id + " ---> " + tecla.hasClass("active")   ); });
-				_alarms.append(_alarmHTML);
+				_alarms.append(_alarmHTML);	
+				tecla.bind("toggle", function (){ 
+					db.changeActiveAlarm( parseInt($(this).attr("data")) , $(this).hasClass("active") ? 1 : 0  );
+					console.log(  $(this).attr("data") + " ---> " + $(this).hasClass("active")   ); 
+				});
+				
             }
         }
     });

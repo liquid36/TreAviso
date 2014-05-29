@@ -53,7 +53,7 @@ var app = {
 
     onDeviceReady: function() {
 		var db = new DB('cordova_bg_locations');
-		db.deleteAllAlarm();
+		/*db.deleteAllAlarm();
 		var a = {}
 		a.name = "Casa Luisina";
 		a.active = 1;
@@ -71,7 +71,7 @@ var app = {
 		b.longitude = "-60.699902";
 		b.metros = "300";
 		db.addAlarm(b);
-		
+		*/
 	    if (window.plugins.backgroundGeoLocation) {
             app.configureBackgroundGeoLocation();  
         } 

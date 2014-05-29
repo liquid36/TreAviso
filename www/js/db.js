@@ -63,9 +63,9 @@
         });
     }; 
 
-    DB.prototype.changeActiveAlarm = function(al) {
+    DB.prototype.changeActiveAlarm = function(id,active) {
         this.db.transaction(function(tx) {
-            tx.executeSql('UPDATE alarm SET active = ? WHERE id = ?' , [al.active,al.id]);
+            tx.executeSql('UPDATE alarm SET active = ? WHERE id = ?' , [active,id]);
             if(tx.finish !== undefined) {
                 tx.finish();
             }
